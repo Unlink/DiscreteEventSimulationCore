@@ -3,17 +3,15 @@
  */
 package sk.uniza.fri.duracik2.dis.des.core.elements;
 
-import sk.uniza.fri.duracik2.dis.des.core.timming.ITime;
-
 /**
  *
  * @author Unlink
  */
 public abstract class AEntity {
 
-	private final ITime aCreationTime;
+	private final double aCreationTime;
 
-	public AEntity(ITime paCreationTime) {
+	public AEntity(double paCreationTime) {
 		this.aCreationTime = paCreationTime;
 	}
 
@@ -21,7 +19,7 @@ public abstract class AEntity {
 	 * Vráti čas vytvorenia entity
 	 * @return 
 	 */
-	public ITime getCreationTime() {
+	public double getCreationTime() {
 		return aCreationTime;
 	}
 

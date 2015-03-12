@@ -3,7 +3,6 @@
  */
 package sk.uniza.fri.duracik2.dis.des.core;
 
-import sk.uniza.fri.duracik2.dis.des.core.timming.ITime;
 import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
 
 /**
@@ -11,22 +10,23 @@ import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
  * @author Unlink
  */
 public abstract class AEntityEvent extends AEvent {
-	
+
 	private AEntity aEntity;
 
-	public AEntityEvent(AEntity paEntity, ITime paTime, int paPriority) {
+	public AEntityEvent(AEntity paEntity, double paTime, int paPriority) {
 		super(paTime, paPriority);
 		this.aEntity = paEntity;
 	}
 
-	public AEntityEvent(AEntity paEntity, ITime paTime) {
+	public AEntityEvent(AEntity paEntity, double paTime) {
 		super(paTime);
 		this.aEntity = paEntity;
 	}
 
 	/**
 	 * Vráti entitu asociovanú s týmto eventom
-	 * @return 
+	 *
+	 * @return
 	 */
 	public AEntity getEntity() {
 		return aEntity;
@@ -34,10 +34,11 @@ public abstract class AEntityEvent extends AEvent {
 
 	/**
 	 * Nastaví entitu eventu
-	 * @param paEntity 
+	 *
+	 * @param paEntity
 	 */
 	public void setEntity(AEntity paEntity) {
 		this.aEntity = paEntity;
 	}
-	
+
 }

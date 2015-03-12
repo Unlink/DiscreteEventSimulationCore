@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
 import sk.uniza.fri.duracik2.dis.des.core.statistics.ResourceStatistics;
-import sk.uniza.fri.duracik2.dis.des.core.timming.Time;
 
 /**
  *
@@ -20,7 +19,7 @@ public abstract class AResource {
 	private final Queue<QueueNode> aQueue;
 
 	private final ASimulation aSimulation;
-	
+
 	protected ResourceStatistics aStatistics;
 
 	public AResource(ASimulation paSimulation) {
@@ -39,7 +38,8 @@ public abstract class AResource {
 
 	/**
 	 * Vráti dostupnosť zdroja
-	 * @return 
+	 *
+	 * @return
 	 */
 	public boolean isFree() {
 		return aOperated == null;
@@ -47,28 +47,30 @@ public abstract class AResource {
 
 	/**
 	 * Vráti aktuálne spracovávanú entitu
-	 * @return 
+	 *
+	 * @return
 	 */
 	public AEntity getOperated() {
 		return aOperated;
 	}
 
 	/**
-	 * Nastaví zdroju spracovávanú entitu
-	 * Len v prípade, ak je zdroj voľný
-	 * @param paEntity 
+	 * Nastaví zdroju spracovávanú entitu Len v prípade, ak je zdroj voľný
+	 *
+	 * @param paEntity
 	 */
 	public void porocessEntity(AEntity paEntity) {
 		if (!isFree()) {
 			throw new ResourceException("Zdroj je obsadený, nieje možné spracovať dalšiu entitu");
 		}
-		aStatistics.handleEntityWaitingEned(new Time(0)); //Aj tá čo nečakala, čakala 0
+		aStatistics.handleEntityWaitingEned(0); //Aj tá čo nečakala, čakala 0
 		aOperated = paEntity;
 	}
-	
+
 	/**
 	 * Dokončí spracovávanie entity
-	 * @return  
+	 *
+	 * @return
 	 */
 	public AEntity doneEntity() {
 		if (aOperated == null) {
@@ -79,10 +81,11 @@ public abstract class AResource {
 		aOperated = null;
 		return entity;
 	}
-	
+
 	/**
 	 * Začne spracovávať entitu z frontu
-	 * @return 
+	 *
+	 * @return
 	 */
 	public AEntity porocessNext() {
 		if (aOperated != null) {
@@ -94,7 +97,8 @@ public abstract class AResource {
 
 	/**
 	 * Prida entitu do fronty v aktualnom simulačnom čase
-	 * @param paEntity 
+	 *
+	 * @param paEntity
 	 */
 	public void addToQueue(AEntity paEntity) {
 		aQueue.add(new QueueNode(paEntity, aSimulation.getSimulationTime()));
@@ -103,18 +107,20 @@ public abstract class AResource {
 
 	/**
 	 * Vyberie entitu z fronty v aktualnom simulačnom čase
-	 * @return 
+	 *
+	 * @return
 	 */
 	private AEntity getFromQueue() {
 		QueueNode node = aQueue.remove();
 		aStatistics.handleQueueChange(aQueue.size(), aSimulation.getSimulationTime());
-		aStatistics.handleEntityWaitingEned(aSimulation.getSimulationTime().minus(node.getEnteredTime()));
+		aStatistics.handleEntityWaitingEned(aSimulation.getSimulationTime() - node.getEnteredTime());
 		return node.getEntity();
 	}
 
 	/**
 	 * Vráti dĺžku frontu
-	 * @return 
+	 *
+	 * @return
 	 */
 	public int getQueueSize() {
 		return aQueue.size();
@@ -123,10 +129,11 @@ public abstract class AResource {
 	protected ASimulation getSimulation() {
 		return aSimulation;
 	}
-	
+
 	/**
 	 * Vráti štatistiku pre zdroj
-	 * @return 
+	 *
+	 * @return
 	 */
 	public ResourceStatistics getStatistics() {
 		return aStatistics;

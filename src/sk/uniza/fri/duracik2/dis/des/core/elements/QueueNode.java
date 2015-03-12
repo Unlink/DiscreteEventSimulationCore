@@ -3,8 +3,6 @@
  */
 package sk.uniza.fri.duracik2.dis.des.core.elements;
 
-import sk.uniza.fri.duracik2.dis.des.core.timming.ITime;
-
 /**
  *
  * @author Unlink
@@ -13,9 +11,9 @@ public class QueueNode {
 
 	private final AEntity aEntity;
 
-	private final ITime aEnteredTime;
+	private final double aEnteredTime;
 
-	public QueueNode(AEntity paEntity, ITime paEnteredTime) {
+	public QueueNode(AEntity paEntity, double paEnteredTime) {
 		this.aEntity = paEntity;
 		this.aEnteredTime = paEnteredTime;
 	}
@@ -24,7 +22,7 @@ public class QueueNode {
 		return aEntity;
 	}
 
-	public ITime getEnteredTime() {
+	public double getEnteredTime() {
 		return aEnteredTime;
 	}
 

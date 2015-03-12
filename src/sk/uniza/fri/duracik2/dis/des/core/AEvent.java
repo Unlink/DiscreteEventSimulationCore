@@ -3,38 +3,36 @@
  */
 package sk.uniza.fri.duracik2.dis.des.core;
 
-import sk.uniza.fri.duracik2.dis.des.core.timming.ITime;
-
 /**
  *
  * @author Unlink
  */
 public abstract class AEvent implements Comparable<AEvent> {
 
-	private ITime aTime;
+	private double aTime;
 
 	private int aPriority;
 
-	public AEvent(ITime paTime, int paPriority) {
+	public AEvent(double paTime, int paPriority) {
 		this.aTime = paTime;
 		this.aPriority = paPriority;
 	}
 
-	public AEvent(ITime paTime) {
+	public AEvent(double paTime) {
 		this(paTime, 0);
 	}
 
-	public ITime getTime() {
+	public double getTime() {
 		return aTime;
 	}
 
-	public void setTime(ITime time) {
+	public void setTime(double time) {
 		this.aTime = time;
 	}
 
 	@Override
 	public int compareTo(AEvent paO) {
-		int cmp1 = aTime.compareTo(paO.aTime);
+		int cmp1 = Double.compare(aTime, paO.aTime);
 		if (cmp1 == 0) {
 			return -Integer.compare(aPriority, paO.aPriority);
 		}
