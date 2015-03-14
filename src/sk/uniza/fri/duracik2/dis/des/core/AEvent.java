@@ -29,6 +29,14 @@ public abstract class AEvent implements Comparable<AEvent> {
 	public void setTime(double time) {
 		this.aTime = time;
 	}
+	
+	/**
+	 * Pripočíta čas k danemu eventu
+	 * @param time 
+	 */
+	protected void appendTime(double time) {
+		this.aTime += time;
+	}
 
 	@Override
 	public int compareTo(AEvent paO) {

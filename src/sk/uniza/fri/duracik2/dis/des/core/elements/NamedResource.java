@@ -12,7 +12,7 @@ import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
  */
 public class NamedResource extends AResource {
 	
-	private String aName;
+	private final String aName;
 
 	public NamedResource(ASimulation paSimulation, Queue<QueueNode> paQueue, String paName) {
 		super(paSimulation, paQueue);

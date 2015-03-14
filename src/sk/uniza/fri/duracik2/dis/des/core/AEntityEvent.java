@@ -28,7 +28,7 @@ public abstract class AEntityEvent extends AEvent {
 	 *
 	 * @return
 	 */
-	public AEntity getEntity() {
+	protected AEntity getEntity() {
 		return aEntity;
 	}
 
@@ -37,7 +37,7 @@ public abstract class AEntityEvent extends AEvent {
 	 *
 	 * @param paEntity
 	 */
-	public void setEntity(AEntity paEntity) {
+	protected void setEntity(AEntity paEntity) {
 		this.aEntity = paEntity;
 	}
 

@@ -21,7 +21,7 @@ public abstract class ASimulation {
 
 	private final EntityStatistics aStatistics;
 
-	protected final HashMap<Class, IGenerator> aGenerators;
+	protected final HashMap<Object, IGenerator> aGenerators;
 
 	public ASimulation(double paBegin) {
 		aSimulationTime = paBegin;
@@ -60,7 +60,7 @@ public abstract class ASimulation {
 	 *
 	 * @return
 	 */
-	public double getSimulationTime() {
+	public double getTime() {
 		return aSimulationTime;
 	}
 
@@ -76,17 +76,12 @@ public abstract class ASimulation {
 	/**
 	 * Vráti generátor pre daný typ eventu
 	 *
-	 * @param paEventClass Class alebo instancia
+	 * @param paKey
 	 *
 	 * @return
 	 */
-	public IGenerator getGenerator(Object paEventClass) {
-		if (paEventClass instanceof Class) {
-			return aGenerators.get((Class) paEventClass);
-		}
-		else {
-			return aGenerators.get(paEventClass.getClass());
-		}
+	public IGenerator getGenerator(Object paKey) {
+		return aGenerators.get(paKey);
 	}
 
 	/**

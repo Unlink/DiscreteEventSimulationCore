@@ -11,21 +11,21 @@ import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
  */
 public class ResourceStatistics {
 
-	private int aHandledEntities;
+	protected int aHandledEntities;
 
-	private double aLastChanged;
+	protected double aLastChanged;
 
-	private final double aSimulationStart;
+	protected final double aSimulationStart;
 
-	private double aQueueArea;
+	protected double aQueueArea;
 
-	private int aLastSize;
+	protected int aLastSize;
 
-	private double aWaitingTime;
+	protected double aWaitingTime;
 
-	private int aWaitedEntities;
+	protected int aWaitedEntities;
 
-	private int aMaxQueue;
+	protected int aMaxQueue;
 
 	public ResourceStatistics(double paStart) {
 		aHandledEntities = 0;
@@ -61,7 +61,7 @@ public class ResourceStatistics {
 	 * @return
 	 */
 	public double getQueueSize() {
-		return aQueueArea / (aLastChanged - aSimulationStart);
+		return aQueueArea  / (aLastChanged - aSimulationStart);
 	}
 
 	/**

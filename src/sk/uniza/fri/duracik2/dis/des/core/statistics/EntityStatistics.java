@@ -11,9 +11,9 @@ import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
  */
 public class EntityStatistics {
 
-	private int aProcessed;
+	protected int aProcessed;
 
-	private double aTime;
+	protected double aTime;
 
 	public EntityStatistics() {
 		aProcessed = 0;
