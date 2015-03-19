@@ -21,11 +21,9 @@ public class ResourceStatistics {
 
 	protected int aLastSize;
 
-	protected double aWaitingTime;
-
-	protected int aWaitedEntities;
-
 	protected int aMaxQueue;
+	
+	private final SimpleStatistics aWaitStatistics;
 
 	public ResourceStatistics(double paStart) {
 		aHandledEntities = 0;
@@ -33,9 +31,8 @@ public class ResourceStatistics {
 		aSimulationStart = paStart;
 		aQueueArea = 0;
 		aLastSize = 0;
-		aWaitingTime = 0;
-		aWaitedEntities = 0;
 		aMaxQueue = 0;
+		aWaitStatistics = new SimpleStatistics();
 	}
 
 	public void handleQueueChange(int paSize, double paTime) {
@@ -51,8 +48,7 @@ public class ResourceStatistics {
 	}
 
 	public void handleEntityWaitingEned(double paTime) {
-		aWaitingTime += paTime;
-		aWaitedEntities++;
+		aWaitStatistics.addToStatistics(paTime);
 	}
 
 	/**
@@ -79,7 +75,7 @@ public class ResourceStatistics {
 	 * @return
 	 */
 	public double getWaintTime() {
-		return aWaitingTime / aWaitedEntities;
+		return aWaitStatistics.getValue();
 	}
 
 	/**

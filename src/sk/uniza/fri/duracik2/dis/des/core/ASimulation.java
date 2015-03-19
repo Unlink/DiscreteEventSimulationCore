@@ -4,8 +4,13 @@
 package sk.uniza.fri.duracik2.dis.des.core;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
+import sk.uniza.fri.duracik2.dis.des.core.elements.DelayEvent;
 import sk.uniza.fri.duracik2.dis.des.core.statistics.EntityStatistics;
 import sk.uniza.fri.duracik2.dis.generators.IGenerator;
 
@@ -22,12 +27,21 @@ public abstract class ASimulation {
 	private final EntityStatistics aStatistics;
 
 	protected final HashMap<Object, IGenerator> aGenerators;
+	
+	private double aSimulationSpeed;
+	
+	private boolean aPlanned;
+	
+	private HashMap<Class, List<ISimulationListener>> aListeners;
 
 	public ASimulation(double paBegin) {
 		aSimulationTime = paBegin;
 		aEventQueue = new PriorityQueue<>(5);
 		aStatistics = new EntityStatistics();
 		aGenerators = new HashMap<>();
+		aSimulationSpeed = Double.POSITIVE_INFINITY;
+		aPlanned = false;
+		aListeners = new HashMap<>();
 	}
 
 	/**
@@ -46,12 +60,20 @@ public abstract class ASimulation {
 	 */
 	public void runSimulation(double paEnd) {
 		while (aEventQueue.size() > 0) {
-			AEvent event = aEventQueue.poll();
-			if (Double.compare(event.getTime(), paEnd) > 0) {
-				break;
+			AEvent event;
+			synchronized (this) {
+				event = aEventQueue.poll();
+				if (Double.compare(event.getTime(), paEnd) > 0) {
+					break;
+				}
+				aSimulationTime = event.getTime();
 			}
-			aSimulationTime = event.getTime();
 			event.execute(this);
+			if (aListeners.containsKey(event.getClass())) {
+				for (ISimulationListener l : aListeners.get(event.getClass())) {
+					l.handleStateChange(this, event);
+				}
+			}
 		}
 	}
 
@@ -91,6 +113,37 @@ public abstract class ASimulation {
 	 */
 	public EntityStatistics getStatistics() {
 		return aStatistics;
+	}
+	
+	/**
+	 * Nastaví rýchlosť simulácie
+	 * @param paValue 
+	 */
+	public void changeSpeed(double paValue) {
+		synchronized (this) {
+			if (paValue < Double.MAX_VALUE && !aPlanned) {
+				planEvent(new DelayEvent(aSimulationTime));
+			}
+			aSimulationSpeed = paValue;
+		}
+	}
+	
+	public double getSpeed() {
+		return aSimulationSpeed;
+	}
+	
+	/**
+	 * Pridá listener na eventy
+	 * @param paListener Listener
+	 * @param paEvents Pole Class Eventov, na ktoré bude listener počúvať
+	 */
+	public void addSimulationListener(ISimulationListener paListener, Class... paEvents) {
+		for (Class e : paEvents) {
+			if (!aListeners.containsKey(e)) {
+				aListeners.put(e, new LinkedList<>());
+			}
+			aListeners.get(e).add(paListener);
+		}
 	}
 
 }

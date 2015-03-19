@@ -10,14 +10,11 @@ import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
  * @author Unlink
  */
 public class EntityStatistics {
-
-	protected int aProcessed;
-
-	protected double aTime;
+	
+	private SimpleStatistics aStatistics;
 
 	public EntityStatistics() {
-		aProcessed = 0;
-		aTime = 0;
+		aStatistics = new SimpleStatistics();
 	}
 
 	/**
@@ -27,8 +24,7 @@ public class EntityStatistics {
 	 * @param paTime
 	 */
 	public void process(AEntity paEntity, double paTime) {
-		aProcessed++;
-		aTime += paTime - paEntity.getCreationTime();
+		aStatistics.addToStatistics(paTime - paEntity.getCreationTime());
 	}
 
 	/**
@@ -37,7 +33,7 @@ public class EntityStatistics {
 	 * @return
 	 */
 	public double getTimeInSystem() {
-		return aTime / aProcessed;
+		return aStatistics.getValue();
 	}
 
 	/**
@@ -46,7 +42,7 @@ public class EntityStatistics {
 	 * @return
 	 */
 	public int getNumberEntities() {
-		return aProcessed;
+		return aStatistics.getCount();
 	}
 
 }

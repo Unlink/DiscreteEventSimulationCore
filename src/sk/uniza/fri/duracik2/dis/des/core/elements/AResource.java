@@ -15,16 +15,16 @@ import sk.uniza.fri.duracik2.dis.des.core.statistics.ResourceStatisticsClosure;
  */
 public abstract class AResource {
 
-	private AEntity aOperated;
+	protected AEntity aOperated;
 
-	private final Queue<QueueNode> aQueue;
+	protected final Queue<QueueNode> aQueue;
 
-	private final ASimulation aSimulation;
+	protected final ASimulation aSimulation;
 
 	protected ResourceStatistics aStatistics;
 
 	public AResource(ASimulation paSimulation) {
-		this(paSimulation, new LinkedList<QueueNode>());
+		this(paSimulation, new LinkedList<>());
 	}
 
 	protected AResource(ASimulation paSimulation, Queue<QueueNode> paQueue) {
