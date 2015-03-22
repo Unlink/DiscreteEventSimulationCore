@@ -74,6 +74,11 @@ public abstract class ASimulation {
 					l.handleStateChange(this, event);
 				}
 			}
+			if (aListeners.containsKey(null)) {
+				for (ISimulationListener l : aListeners.get(null)) {
+					l.handleStateChange(this, event);
+				}
+			}
 		}
 	}
 

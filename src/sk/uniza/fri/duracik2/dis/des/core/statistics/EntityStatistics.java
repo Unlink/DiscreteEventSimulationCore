@@ -44,5 +44,9 @@ public class EntityStatistics {
 	public int getNumberEntities() {
 		return aStatistics.getCount();
 	}
+	
+	public void clear() {
+		aStatistics.clear();
+	}
 
 }

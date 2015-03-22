@@ -15,7 +15,7 @@ public class ResourceStatistics {
 
 	protected double aLastChanged;
 
-	protected final double aSimulationStart;
+	protected double aSimulationStart;
 
 	protected double aQueueArea;
 
@@ -74,7 +74,7 @@ public class ResourceStatistics {
 	 *
 	 * @return
 	 */
-	public double getWaintTime() {
+	public double getWaitTime() {
 		return aWaitStatistics.getValue();
 	}
 
@@ -85,5 +85,14 @@ public class ResourceStatistics {
 	 */
 	public int getMaxQueue() {
 		return aMaxQueue;
+	}
+	
+	public void clear(double paTime) {
+		aWaitStatistics.clear();
+		aHandledEntities = 0;
+		aSimulationStart = paTime;
+		aLastChanged = paTime;
+		aQueueArea = 0;
+		aMaxQueue = 0;
 	}
 }

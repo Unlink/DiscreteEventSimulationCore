@@ -16,9 +16,7 @@ public class SimpleStatistics {
 	private int aCount;
 
 	public SimpleStatistics() {
-		aSum = 0;
-		aSquareSum = 0;
-		aCount = 0;
+		clear();
 	}
 
 	public void addToStatistics(double paValue) {
@@ -47,5 +45,11 @@ public class SimpleStatistics {
 	public double getMax(double paLevel) {
 		double a = 1 - ((1 - paLevel)/2);
 		return getValue() - StatUtil.getInvCDF(a, true)*(getDeviation()/Math.sqrt(aCount-1));
+	}
+
+	public final void clear() {
+		aSum = 0;
+		aSquareSum = 0;
+		aCount = 0;
 	}
 }
