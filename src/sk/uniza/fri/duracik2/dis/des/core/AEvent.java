@@ -7,7 +7,7 @@ package sk.uniza.fri.duracik2.dis.des.core;
  *
  * @author Unlink
  */
-public abstract class AEvent implements Comparable<AEvent> {
+public abstract class AEvent implements Comparable {
 
 	private double aTime;
 
@@ -39,10 +39,10 @@ public abstract class AEvent implements Comparable<AEvent> {
 	}
 
 	@Override
-	public int compareTo(AEvent paO) {
-		int cmp1 = Double.compare(aTime, paO.aTime);
+	public int compareTo(Object paO) {
+		int cmp1 = Double.compare(aTime, ((AEvent)paO).aTime);
 		if (cmp1 == 0) {
-			return -Integer.compare(aPriority, paO.aPriority);
+			return -Integer.compare(aPriority, ((AEvent)paO).aPriority);
 		}
 		else {
 			return cmp1;
