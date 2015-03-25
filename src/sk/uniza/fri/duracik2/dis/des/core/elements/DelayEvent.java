@@ -13,20 +13,35 @@ import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
  * @author Unlink
  */
 public class DelayEvent extends AEvent {
+	
+	private long aDelay;
+	private double aNext;
 
-	public DelayEvent(double paTime) {
+	public DelayEvent(long paDelay, double paNext, double paTime) {
 		super(paTime);
+		this.aDelay = paDelay;
+		this.aNext = paNext;
 	}
 
 	@Override
 	public void execute(ASimulation paSimulation) {
-		appendTime(paSimulation.getSpeed()*0.2);
 		try {
-			Thread.sleep(200);
+			Thread.sleep(aDelay);
 		}
 		catch (InterruptedException ex) {
-			ex.printStackTrace();
 		}
+		if (paSimulation.hasDelay()) {
+			appendTime(aNext);
+			paSimulation.planEvent(this);
+		}
+	}
+
+	public void setDelay(long paDelay) {
+		this.aDelay = paDelay;
+	}
+
+	public void setNext(double paNext) {
+		this.aNext = paNext;
 	}
 	
 }

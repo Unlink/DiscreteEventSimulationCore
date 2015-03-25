@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
 import sk.uniza.fri.duracik2.dis.des.core.statistics.ResourceStatistics;
-import sk.uniza.fri.duracik2.dis.des.core.statistics.ResourceStatisticsClosure;
 
 /**
  *
@@ -31,7 +30,7 @@ public abstract class AResource {
 		aSimulation = paSimulation;
 		aOperated = null;
 		aQueue = paQueue;
-		aStatistics = new ResourceStatisticsClosure(paSimulation, paSimulation.getTime());
+		aStatistics = new ResourceStatisticsClosure(paSimulation.getTime());
 	}
 
 	/**
@@ -53,8 +52,8 @@ public abstract class AResource {
 	}
 
 	/**
-	 * Nastaví zdroju spracovávanú entitu Len v prípade, ak je zdroj voľný
-	 * Ak je paCount nastavený na true, pripočíta danej entite čakanie 0
+	 * Nastaví zdroju spracovávanú entitu Len v prípade, ak je zdroj voľný Ak je
+	 * paCount nastavený na true, pripočíta danej entite čakanie 0
 	 *
 	 * @param paEntity
 	 * @param paCount
@@ -68,11 +67,12 @@ public abstract class AResource {
 		}
 		aOperated = paEntity;
 	}
-	
+
 	/**
 	 * Nastaví zdroju spracovávanú entitu Len v prípade, ak je zdroj voľný
 	 * Pripočíta čakanie entity rovne 0
-	 * @param paEntity 
+	 *
+	 * @param paEntity
 	 */
 	public void porocessEntity(AEntity paEntity) {
 		porocessEntity(paEntity, true);
@@ -115,7 +115,7 @@ public abstract class AResource {
 		aQueue.add(new QueueNode(paEntity, aSimulation.getTime()));
 		aStatistics.handleQueueChange(aQueue.size(), aSimulation.getTime());
 	}
-	
+
 	/**
 	 * Vyberie entitu z fronty v aktualnom simulačnom čase
 	 *
@@ -148,5 +148,40 @@ public abstract class AResource {
 	 */
 	public ResourceStatistics getStatistics() {
 		return aStatistics;
+	}
+
+	protected class QueueNode {
+
+		private final AEntity aEntity;
+
+		private final double aEnteredTime;
+
+		public QueueNode(AEntity paEntity, double paEnteredTime) {
+			this.aEntity = paEntity;
+			this.aEnteredTime = paEnteredTime;
+		}
+
+		public AEntity getEntity() {
+			return aEntity;
+		}
+
+		public double getEnteredTime() {
+			return aEnteredTime;
+		}
+
+	}
+
+	private class ResourceStatisticsClosure extends ResourceStatistics {
+
+		public ResourceStatisticsClosure(double paStart) {
+			super(paStart);
+		}
+
+		@Override
+		public double getQueueSize() {
+			double diff = aSimulation.getTime() - aLastChanged;
+			return (aQueueArea + (diff * aLastSize)) / (aSimulation.getTime() - aSimulationStart);
+		}
+
 	}
 }

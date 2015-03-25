@@ -4,10 +4,6 @@
 package sk.uniza.fri.duracik2.dis.des.core;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.PriorityQueue;
 import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
 import sk.uniza.fri.duracik2.dis.des.core.elements.DelayEvent;
@@ -20,7 +16,7 @@ import sk.uniza.fri.duracik2.dis.generators.IGenerator;
  */
 public abstract class ASimulation {
 
-	private double aSimulationTime;
+	private volatile double aSimulationTime;
 
 	private final PriorityQueue<AEvent> aEventQueue;
 
@@ -28,20 +24,14 @@ public abstract class ASimulation {
 
 	protected final HashMap<Object, IGenerator> aGenerators;
 	
-	private double aSimulationSpeed;
-	
-	private boolean aPlanned;
-	
-	private HashMap<Class, List<ISimulationListener>> aListeners;
+	private volatile DelayEvent aDelay;
 
 	public ASimulation(double paBegin) {
 		aSimulationTime = paBegin;
 		aEventQueue = new PriorityQueue<>(5);
 		aStatistics = new EntityStatistics();
 		aGenerators = new HashMap<>();
-		aSimulationSpeed = Double.POSITIVE_INFINITY;
-		aPlanned = false;
-		aListeners = new HashMap<>();
+		aDelay = null;
 	}
 
 	/**
@@ -69,16 +59,6 @@ public abstract class ASimulation {
 				aSimulationTime = event.getTime();
 			}
 			event.execute(this);
-			if (aListeners.containsKey(event.getClass())) {
-				for (ISimulationListener l : aListeners.get(event.getClass())) {
-					l.handleStateChange(this, event);
-				}
-			}
-			if (aListeners.containsKey(null)) {
-				for (ISimulationListener l : aListeners.get(null)) {
-					l.handleStateChange(this, event);
-				}
-			}
 		}
 	}
 
@@ -120,35 +100,24 @@ public abstract class ASimulation {
 		return aStatistics;
 	}
 	
-	/**
-	 * Nastaví rýchlosť simulácie
-	 * @param paValue 
-	 */
-	public void changeSpeed(double paValue) {
+	public void setDelay(long paDelay, double paRepeat) {
 		synchronized (this) {
-			if (paValue < Double.MAX_VALUE && !aPlanned) {
-				planEvent(new DelayEvent(aSimulationTime));
+			if (aDelay == null){
+				aDelay = new DelayEvent(paDelay, paRepeat, getTime()+paRepeat);
 			}
-			aSimulationSpeed = paValue;
+			else {
+				aDelay.setDelay(paDelay);
+				aDelay.setNext(paRepeat);
+			}
 		}
 	}
 	
-	public double getSpeed() {
-		return aSimulationSpeed;
+	public void removeDelay() {
+		aDelay = null;
 	}
 	
-	/**
-	 * Pridá listener na eventy
-	 * @param paListener Listener
-	 * @param paEvents Pole Class Eventov, na ktoré bude listener počúvať
-	 */
-	public void addSimulationListener(ISimulationListener paListener, Class... paEvents) {
-		for (Class e : paEvents) {
-			if (!aListeners.containsKey(e)) {
-				aListeners.put(e, new LinkedList<>());
-			}
-			aListeners.get(e).add(paListener);
-		}
+	public boolean hasDelay() {
+		return aDelay != null;
 	}
 
 }
