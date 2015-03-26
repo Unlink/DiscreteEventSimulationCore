@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
+import sk.uniza.fri.duracik2.dis.des.core.elements.ASystemEvent;
 import sk.uniza.fri.duracik2.dis.des.core.elements.DelayEvent;
 import sk.uniza.fri.duracik2.dis.des.core.elements.EndWarmUpEvent;
 import sk.uniza.fri.duracik2.dis.des.core.elements.PauseEvent;
@@ -89,8 +90,10 @@ public abstract class ASimulation {
 				aSimulationTime = event.getTime();
 			}
 			event.execute(this);
-			for (ISimulationListener l : aListeners) {
-				l.onEventDone(event);
+			if (aState == ESimulationState.RUNNING && !(event instanceof ASystemEvent)) {
+				for (ISimulationListener l : aListeners) {
+					l.onEventDone(event);
+				}
 			}
 		}
 		setState(ESimulationState.END);
@@ -134,6 +137,12 @@ public abstract class ASimulation {
 		return aStatistics;
 	}
 
+	/**
+	 * Nastaví delay event
+	 *
+	 * @param paDelay dĺžka uspania
+	 * @param paRepeat opakovanie
+	 */
 	public void setDelay(long paDelay, double paRepeat) {
 		synchronized (this) {
 			if (aDelay == null) {
@@ -157,13 +166,17 @@ public abstract class ASimulation {
 	public ESimulationState getState() {
 		return aState;
 	}
+	
+	public void stop() {
+		setState(ESimulationState.END);
+	}
 
 	public void pause() {
 		synchronized (this) {
 			if (aState == ESimulationState.RUNNING) {
 				setState(ESimulationState.PAUSED);
-				aDelay.setTime(aSimulationTime);
-				planEvent(aDelay);
+				aPause.setTime(aSimulationTime);
+				planEvent(aPause);
 			}
 		}
 	}
@@ -196,6 +209,9 @@ public abstract class ASimulation {
 	 * @internal
 	 */
 	public void _onReplicationDone() {
+		if (aReplicationNum == 999) {
+			int a = 5;
+		}
 		onReplicationDone();
 		for (ISimulationListener l : aListeners) {
 			l.onReplicationDone();
@@ -204,6 +220,15 @@ public abstract class ASimulation {
 	}
 
 	protected void onReplicationDone() {
+	}
+
+	/**
+	 * @internal
+	 */
+	public void _onTimeChanged() {
+		for (ISimulationListener l : aListeners) {
+			l.onTimeChanged();
+		}
 	}
 
 	public double getWarmUp() {
@@ -223,5 +248,13 @@ public abstract class ASimulation {
 		for (ISimulationListener l : aListeners) {
 			l.onStateChanged();
 		}
+	}
+	
+	public void addSimulationListener(ISimulationListener paListener) {
+		aListeners.add(paListener);
+	}
+	
+	public void removeSimulationListener(ISimulationListener paListener) {
+		aListeners.remove(paListener);
 	}
 }

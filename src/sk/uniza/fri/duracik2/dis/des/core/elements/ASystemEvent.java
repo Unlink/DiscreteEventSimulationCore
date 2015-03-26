@@ -8,6 +8,7 @@ import sk.uniza.fri.duracik2.dis.des.core.AEvent;
 /**
  *
  * @author Unlink
+ * @internal
  */
 public abstract class ASystemEvent extends AEvent {
 

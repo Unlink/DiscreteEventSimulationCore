@@ -8,6 +8,7 @@ import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
 /**
  *
  * @author Unlink
+ * @internal
  */
 public class DelayEvent extends ASystemEvent {
 
@@ -27,6 +28,7 @@ public class DelayEvent extends ASystemEvent {
 		}
 		catch (InterruptedException ex) {
 		}
+		paSimulation._onTimeChanged();
 		if (paSimulation.hasDelay()) {
 			appendTime(aNext);
 			paSimulation.planEvent(this);

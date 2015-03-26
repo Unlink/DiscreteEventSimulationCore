@@ -16,5 +16,7 @@ public interface ISimulationListener {
 	public void onStateChanged();
 
 	public void onEventDone(AEvent paEvent);
+	
+	public void onTimeChanged();
 
 }

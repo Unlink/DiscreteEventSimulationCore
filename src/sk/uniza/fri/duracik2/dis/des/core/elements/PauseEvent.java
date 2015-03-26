@@ -9,6 +9,7 @@ import sk.uniza.fri.duracik2.dis.des.core.ESimulationState;
 /**
  *
  * @author Unlink
+ * @internal
  */
 public class PauseEvent extends ASystemEvent {
 
