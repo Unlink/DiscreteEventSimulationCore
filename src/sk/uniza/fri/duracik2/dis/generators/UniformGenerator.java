@@ -12,7 +12,7 @@ public class UniformGenerator extends AGenerator {
 	private final double aMin;
 
 	private final double aMax;
-	
+
 	public UniformGenerator(double paMin, double paMax) {
 		if (paMin >= paMax) {
 			throw new IllegalArgumentException("Maximálna hodnota musí byť väčšia ako minimálna, zadané min = '" + paMin + "', max = '" + paMax + "'");

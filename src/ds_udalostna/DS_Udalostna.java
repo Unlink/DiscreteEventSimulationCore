@@ -31,5 +31,5 @@ public class DS_Udalostna {
 		}
 		writer.close();
 	}
-	
+
 }

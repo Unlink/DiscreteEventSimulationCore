@@ -17,7 +17,8 @@ public abstract class AEntity {
 
 	/**
 	 * Vráti čas vytvorenia entity
-	 * @return 
+	 *
+	 * @return
 	 */
 	public double getCreationTime() {
 		return aCreationTime;

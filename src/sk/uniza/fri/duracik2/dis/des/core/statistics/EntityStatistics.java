@@ -10,7 +10,7 @@ import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
  * @author Unlink
  */
 public class EntityStatistics {
-	
+
 	private SimpleStatistics aStatistics;
 
 	public EntityStatistics() {
@@ -44,7 +44,7 @@ public class EntityStatistics {
 	public int getNumberEntities() {
 		return aStatistics.getCount();
 	}
-	
+
 	public void clear() {
 		aStatistics.clear();
 	}

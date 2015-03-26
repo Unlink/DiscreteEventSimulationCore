@@ -11,13 +11,15 @@ public interface IGenerator {
 
 	/**
 	 * Returns next value from generator
-	 * @return 
+	 *
+	 * @return
 	 */
 	public double next();
 
 	/**
 	 * Returns next integer value
-	 * @return 
+	 *
+	 * @return
 	 */
 	public int nextInt();
 

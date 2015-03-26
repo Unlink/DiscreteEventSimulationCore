@@ -9,9 +9,10 @@ import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
 /**
  *
  * @author Unlink
+ * @deprecated
  */
 public class NamedResource extends AResource {
-	
+
 	private final String aName;
 
 	public NamedResource(ASimulation paSimulation, Queue<QueueNode> paQueue, String paName) {
@@ -27,5 +28,5 @@ public class NamedResource extends AResource {
 	public String getName() {
 		return aName;
 	}
-	
+
 }

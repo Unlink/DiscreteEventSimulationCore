@@ -19,5 +19,5 @@ public class ResourceException extends RuntimeException {
 	public ResourceException(String paMessage, Throwable paCause) {
 		super(paMessage, paCause);
 	}
-	
+
 }

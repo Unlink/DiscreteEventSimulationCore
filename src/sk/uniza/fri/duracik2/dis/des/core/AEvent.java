@@ -29,10 +29,11 @@ public abstract class AEvent implements Comparable {
 	public void setTime(double time) {
 		this.aTime = time;
 	}
-	
+
 	/**
 	 * Pripočíta čas k danemu eventu
-	 * @param time 
+	 *
+	 * @param time
 	 */
 	protected void appendTime(double time) {
 		this.aTime += time;
@@ -40,9 +41,9 @@ public abstract class AEvent implements Comparable {
 
 	@Override
 	public int compareTo(Object paO) {
-		int cmp1 = Double.compare(aTime, ((AEvent)paO).aTime);
+		int cmp1 = Double.compare(aTime, ((AEvent) paO).aTime);
 		if (cmp1 == 0) {
-			return -Integer.compare(aPriority, ((AEvent)paO).aPriority);
+			return -Integer.compare(aPriority, ((AEvent) paO).aPriority);
 		}
 		else {
 			return cmp1;
@@ -51,6 +52,7 @@ public abstract class AEvent implements Comparable {
 
 	/**
 	 * Spracuje udalosť
+	 *
 	 * @param paSimulation Simulačný kontext
 	 */
 	public abstract void execute(ASimulation paSimulation);

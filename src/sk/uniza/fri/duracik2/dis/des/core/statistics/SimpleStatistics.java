@@ -14,9 +14,9 @@ public class SimpleStatistics {
 	private double aSquareSum;
 
 	private int aCount;
-	
+
 	private double aMin;
-	
+
 	private double aMax;
 
 	public SimpleStatistics() {
@@ -30,27 +30,27 @@ public class SimpleStatistics {
 		aMax = Double.max(aMax, paValue);
 		aMin = Double.min(aMin, paValue);
 	}
-	
+
 	public int getCount() {
 		return aCount;
 	}
-	
+
 	public double getValue() {
 		return aSum / aCount;
 	}
-	
+
 	public double getDeviation() {
-		return (aSquareSum/aCount) - Math.pow((aSum/aCount), 2); 
+		return (aSquareSum / aCount) - Math.pow((aSum / aCount), 2);
 	}
-	
+
 	public double getLow(double paLevel) {
-		double a = 1 - ((1 - paLevel)/2);
-		return getValue() - StatUtil.getInvCDF(a, true)*(getDeviation()/Math.sqrt(aCount-1));
+		double a = 1 - ((1 - paLevel) / 2);
+		return getValue() - StatUtil.getInvCDF(a, true) * (Math.sqrt(getDeviation()) / Math.sqrt(aCount - 1));
 	}
-	
+
 	public double getHigh(double paLevel) {
-		double a = 1 - ((1 - paLevel)/2);
-		return getValue() + StatUtil.getInvCDF(a, true)*(getDeviation()/Math.sqrt(aCount-1));
+		double a = 1 - ((1 - paLevel) / 2);
+		return getValue() + StatUtil.getInvCDF(a, true) * (Math.sqrt(getDeviation()) / Math.sqrt(aCount - 1));
 	}
 
 	public final void clear() {

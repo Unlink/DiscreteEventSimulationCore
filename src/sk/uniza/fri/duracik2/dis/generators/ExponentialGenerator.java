@@ -13,7 +13,7 @@ public class ExponentialGenerator extends AGenerator {
 
 	public ExponentialGenerator(double paE) {
 		if (paE <= 0) {
-			throw new IllegalArgumentException("Stredná hodnota musí byť > ako 0, '"+paE+"' zadané");
+			throw new IllegalArgumentException("Stredná hodnota musí byť > ako 0, '" + paE + "' zadané");
 		}
 		this.aLambda = 1 / paE;
 	}

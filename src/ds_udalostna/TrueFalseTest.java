@@ -11,7 +11,7 @@ import sk.uniza.fri.duracik2.dis.generators.TrueFalseGenerator;
  * @author Unlink
  */
 public class TrueFalseTest {
-	
+
 	public static void main(String[] args) {
 		double sum = 0;
 		IGenerator g = new TrueFalseGenerator(0.12);
@@ -20,5 +20,5 @@ public class TrueFalseTest {
 		}
 		System.out.println(sum);
 	}
-	
+
 }
