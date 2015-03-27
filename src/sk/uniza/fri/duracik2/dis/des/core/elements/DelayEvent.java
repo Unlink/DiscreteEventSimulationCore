@@ -13,12 +13,12 @@ import sk.uniza.fri.duracik2.dis.des.core.ASimulation;
 public class DelayEvent extends ASystemEvent {
 
 	private long aDelay;
-	private double aNext;
+	private double aSkip;
 
-	public DelayEvent(long paDelay, double paNext, double paTime) {
+	public DelayEvent(long paDelay, double paSkip, double paTime) {
 		super(paTime);
 		this.aDelay = paDelay;
-		this.aNext = paNext;
+		this.aSkip = paSkip;
 	}
 
 	@Override
@@ -29,8 +29,8 @@ public class DelayEvent extends ASystemEvent {
 		catch (InterruptedException ex) {
 		}
 		paSimulation._onTimeChanged();
-		if (paSimulation.hasDelay()) {
-			appendTime(aNext);
+		if (paSimulation.hasDelay(this)) {
+			appendTime(aSkip);
 			paSimulation.planEvent(this);
 		}
 	}
@@ -39,8 +39,8 @@ public class DelayEvent extends ASystemEvent {
 		this.aDelay = paDelay;
 	}
 
-	public void setNext(double paNext) {
-		this.aNext = paNext;
+	public void setSkip(double paSkip) {
+		this.aSkip = paSkip;
 	}
 
 }

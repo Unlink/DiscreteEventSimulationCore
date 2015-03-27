@@ -7,11 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import sk.uniza.fri.duracik2.dis.des.core.elements.AEntity;
-import sk.uniza.fri.duracik2.dis.des.core.elements.ASystemEvent;
-import sk.uniza.fri.duracik2.dis.des.core.elements.DelayEvent;
-import sk.uniza.fri.duracik2.dis.des.core.elements.EndWarmUpEvent;
-import sk.uniza.fri.duracik2.dis.des.core.elements.PauseEvent;
+import sk.uniza.fri.duracik2.dis.des.core.elements.*;
 import sk.uniza.fri.duracik2.dis.des.core.statistics.EntityStatistics;
 import sk.uniza.fri.duracik2.dis.generators.IGenerator;
 
@@ -35,11 +31,9 @@ public abstract class ASimulation {
 
 	protected final HashMap<Object, IGenerator> aGenerators;
 
-	private volatile DelayEvent aDelay;
+	private DelayEvent aDelay;
 
 	private volatile ESimulationState aState;
-
-	private final PauseEvent aPause = new PauseEvent();
 
 	private final List<ISimulationListener> aListeners;
 
@@ -83,6 +77,14 @@ public abstract class ASimulation {
 		while (aEventQueue.size() > 0 && aState != ESimulationState.END) {
 			AEvent event;
 			synchronized (this) {
+				while (aState == ESimulationState.PAUSED) {
+					try {
+						wait();
+					}
+					catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}
 				event = aEventQueue.poll();
 				if (Double.compare(event.getTime(), paSimulationEnd) > 0) {
 					break;
@@ -141,16 +143,17 @@ public abstract class ASimulation {
 	 * Nastaví delay event
 	 *
 	 * @param paDelay dĺžka uspania
-	 * @param paRepeat opakovanie
+	 * @param paSkip opakovanie
 	 */
-	public void setDelay(long paDelay, double paRepeat) {
+	public void setDelay(long paDelay, double paSkip) {
 		synchronized (this) {
 			if (aDelay == null) {
-				aDelay = new DelayEvent(paDelay, paRepeat, getTime() + paRepeat);
+				aDelay = new DelayEvent(paDelay, paSkip, getTime() + paSkip);
+				planEvent(aDelay);
 			}
 			else {
 				aDelay.setDelay(paDelay);
-				aDelay.setNext(paRepeat);
+				aDelay.setSkip(paSkip);
 			}
 		}
 	}
@@ -162,11 +165,15 @@ public abstract class ASimulation {
 	public boolean hasDelay() {
 		return aDelay != null;
 	}
+	
+	public boolean hasDelay(DelayEvent paDelay) {
+		return aDelay == paDelay;
+	}
 
 	public ESimulationState getState() {
 		return aState;
 	}
-	
+
 	public void stop() {
 		setState(ESimulationState.END);
 	}
@@ -175,17 +182,15 @@ public abstract class ASimulation {
 		synchronized (this) {
 			if (aState == ESimulationState.RUNNING) {
 				setState(ESimulationState.PAUSED);
-				aPause.setTime(aSimulationTime);
-				planEvent(aPause);
 			}
 		}
 	}
 
 	public void resume() {
-		synchronized (aPause) {
+		synchronized (this) {
 			if (aState == ESimulationState.PAUSED) {
-				setState(aState = ESimulationState.RUNNING);
-				aPause.notify();
+				setState(ESimulationState.RUNNING);
+				this.notify();
 			}
 		}
 	}
@@ -209,9 +214,6 @@ public abstract class ASimulation {
 	 * @internal
 	 */
 	public void _onReplicationDone() {
-		if (aReplicationNum == 999) {
-			int a = 5;
-		}
 		onReplicationDone();
 		for (ISimulationListener l : aListeners) {
 			l.onReplicationDone();
@@ -242,6 +244,10 @@ public abstract class ASimulation {
 	public int getReplicationNum() {
 		return aReplicationNum;
 	}
+	
+	public double getRelativeTime() {
+		return aSimulationTime - aWarmUp - (aReplicationNum-1)*aReplicationLength;
+	}
 
 	private void setState(ESimulationState paState) {
 		aState = paState;
@@ -249,11 +255,11 @@ public abstract class ASimulation {
 			l.onStateChanged();
 		}
 	}
-	
+
 	public void addSimulationListener(ISimulationListener paListener) {
 		aListeners.add(paListener);
 	}
-	
+
 	public void removeSimulationListener(ISimulationListener paListener) {
 		aListeners.remove(paListener);
 	}

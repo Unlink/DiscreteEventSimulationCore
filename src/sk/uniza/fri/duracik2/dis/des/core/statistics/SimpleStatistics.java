@@ -36,6 +36,9 @@ public class SimpleStatistics {
 	}
 
 	public double getValue() {
+		if (aCount == 0) {
+			return 0;
+		}
 		return aSum / aCount;
 	}
 
