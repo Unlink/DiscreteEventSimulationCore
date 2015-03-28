@@ -17,7 +17,7 @@ public abstract class ASystemEvent extends AEvent {
 	}
 
 	public ASystemEvent(double paTime) {
-		super(paTime);
+		super(paTime, Integer.MAX_VALUE);
 	}
 
 }
