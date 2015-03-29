@@ -23,7 +23,7 @@ public abstract class AResource {
 	protected ResourceStatistics aStatistics;
 
 	public AResource(ASimulation paSimulation) {
-		this(paSimulation, new LinkedList<>());
+		this(paSimulation, new LinkedList<AResource.QueueNode>());
 	}
 
 	protected AResource(ASimulation paSimulation, Queue<QueueNode> paQueue) {
@@ -179,8 +179,7 @@ public abstract class AResource {
 
 		@Override
 		public double getQueueSize() {
-			double diff = aSimulation.getTime() - aLastChanged;
-			return (aQueueArea + (diff * aLastSize)) / (aSimulation.getTime() - aSimulationStart);
+			return getQueueSize(aSimulation.getTime());
 		}
 
 	}

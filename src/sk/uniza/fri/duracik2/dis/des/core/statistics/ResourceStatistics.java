@@ -13,34 +13,18 @@ public class ResourceStatistics {
 
 	protected int aHandledEntities;
 
-	protected double aLastChanged;
-
-	protected double aSimulationStart;
-
-	protected double aQueueArea;
-
-	protected int aLastSize;
-
-	protected int aMaxQueue;
-
 	private final SimpleStatistics aWaitStatistics;
+	
+	private final QueueStatistics aQueueStatistics;
 
 	public ResourceStatistics(double paStart) {
 		aHandledEntities = 0;
-		aLastChanged = paStart;
-		aSimulationStart = paStart;
-		aQueueArea = 0;
-		aLastSize = 0;
-		aMaxQueue = 0;
 		aWaitStatistics = new SimpleStatistics();
+		aQueueStatistics = new QueueStatistics(paStart);
 	}
 
 	public void handleQueueChange(int paSize, double paTime) {
-		aMaxQueue = Math.max(aMaxQueue, paSize);
-		double timeDiff = paTime - aLastChanged;
-		aQueueArea += timeDiff * aLastSize;
-		aLastChanged = paTime;
-		aLastSize = paSize;
+		aQueueStatistics.handleQueueChange(paSize, paTime);
 	}
 
 	public void handleEntityServed(AEntity paEntity) {
@@ -57,7 +41,17 @@ public class ResourceStatistics {
 	 * @return
 	 */
 	public double getQueueSize() {
-		return aQueueArea / (aLastChanged - aSimulationStart);
+		return aQueueStatistics.getQueueSize();
+	}
+	
+	/**
+	 * Vráti priemernú dĺžku frontu s zohľadnením aktuálneho času
+	 * 
+	 * @param paTime Aktuálny čas
+	 * @return
+	 */
+	public double getQueueSize(double paTime) {
+		return aQueueStatistics.getQueueSize(paTime);
 	}
 
 	/**
@@ -84,15 +78,13 @@ public class ResourceStatistics {
 	 * @return
 	 */
 	public int getMaxQueue() {
-		return aMaxQueue;
+		return aQueueStatistics.getMaxQueue();
 	}
 
 	public void clear(double paTime) {
 		aWaitStatistics.clear();
 		aHandledEntities = 0;
-		aSimulationStart = paTime;
-		aLastChanged = paTime;
-		aQueueArea = 0;
-		aMaxQueue = 0;
+		aQueueStatistics.clear(paTime);
 	}
+	
 }
